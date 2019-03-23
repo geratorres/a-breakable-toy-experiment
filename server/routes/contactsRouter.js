@@ -3,15 +3,11 @@ const router = new Router();
 
 const { contactsCtrl } = require('../controllers');
 
+//TODO: add api version on Routes
+router.get('/contact-management/contacts', contactsCtrl.readAll)
+    .post('/contact-management/contacts', contactsCtrl.createOne)
+    .get('/contact-management/contacts/:id', contactsCtrl.readOne)
+    .delete('/contact-management/contacts/:id', contactsCtrl.deleteOne)
+    .put('/contact-management/contacts/:id', contactsCtrl.updateOne);
 
-router.get('/contacts', contactsCtrl.index);
-
-router.post('/contacts', contactsCtrl.create);
-/*
-router.get('/contacts/:id', contactsCtrl.getOne);
-
-router.put('/contacts/:id', contactsCtrl.update);
-
-router.delete('/contacts/:id', contactsCtrl.delete);
-*/
 module.exports = router;
