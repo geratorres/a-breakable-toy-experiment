@@ -1,10 +1,9 @@
+const http = require('http');
+const { port, dbStr } = require('./config');
 const mongoose = require('mongoose');
 const app = require('./app');
 
-const port = 3000;
-const uri = 'mongodb://localhost:27017/a-breakable-toy-experiment';
-
-mongoose.connect(uri, { useNewUrlParser: true });
+mongoose.connect(dbStr, { useNewUrlParser: true, useCreateIndex: true });
 const db = mongoose.connection;
 
 db.on('error', err => {
@@ -14,7 +13,7 @@ db.on('error', err => {
 
 db.on('open', () => {
     console.log('Connected to Mongodb');
-    app.listen(port, () => {
-        console.log('Servidor escuchando en el puerto: ' + port);
+    http.createServer(app.callback()).listen(port, () => {
+        console.log('listening on port: ' + port);
     });
 });
