@@ -1,0 +1,7 @@
+Use Joi Validation in middlewares
+
+Validate params with joi Validation in middleware
+
+implement pager on a middleware
+
+may be implement filtering on middleware too
