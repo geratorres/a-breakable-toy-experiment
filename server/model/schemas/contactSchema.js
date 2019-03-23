@@ -7,11 +7,9 @@ const Schema = mongoose.Schema;
 const contactSchema = new Schema({
     firstName: {
         type: String,
-        required: 'Name is required!'
     },
     lastName: {
         type: String,
-        required: 'Last name is required!'
     },
     company: {
         type: String
@@ -23,7 +21,6 @@ const contactSchema = new Schema({
     email: {
         type: String,
         unique: true,
-        required: 'email is required!'
     },
     created: {
         type: Date,

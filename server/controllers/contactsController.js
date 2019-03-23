@@ -13,9 +13,9 @@ module.exports = {
             };
 
             //TODO implement a filter
-            const filter = { $or: [] };
-            firstName && filter.$or.push({ firstName: new RegExp(firstName, 'i') });
-            lastName && filter.$or.push({ lastName: new RegExp(lastName, 'i') });
+            const filter = { $and: [] };
+            firstName && filter.$and.push({ firstName: new RegExp(firstName, 'i') });
+            lastName && filter.$and.push({ lastName: new RegExp(lastName, 'i') });
 
             const result = await Contact.paginate(filter, pager);
 
