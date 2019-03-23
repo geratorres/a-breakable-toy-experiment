@@ -13,7 +13,9 @@ module.exports = {
             };
 
             //TODO implement a filter
-            const filter = {};
+            const filter = { $or: [] };
+            firstName && filter.$or.push({ firstName: new RegExp(firstName, 'i') });
+            lastName && filter.$or.push({ lastName: new RegExp(lastName, 'i') });
 
             const result = await Contact.paginate(filter, pager);
 
@@ -127,7 +129,7 @@ module.exports = {
 
             if (error) ctx.throw(400, error);
 
-            const updatedDoc = await Contact.findByIdAndUpdate( id , { $set: value }, options);
+            const updatedDoc = await Contact.findByIdAndUpdate(id, { $set: value }, options);
 
             ctx.status = 201;
             ctx.body = {
