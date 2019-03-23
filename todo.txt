@@ -1,7 +1,9 @@
-Use Joi Validation in middlewares
+Server
+    Nice to have:
+        Use Joi Validation in middlewares
 
-Validate params with joi Validation in middleware
+        Validate params with joi Validation in middleware
 
-implement pager on a middleware
+        implement pager on a middleware
 
-may be implement filtering on middleware too
+        may be implement filtering on middleware too
