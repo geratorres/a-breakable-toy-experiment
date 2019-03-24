@@ -1,19 +1,9 @@
 module.exports = async (ctx, next) => {
-    const { current, pageSize, firstName, lastName } = ctx.query;
-
-    //Antd design Pagination Labels
-    const myCustomLabels = {
-        totalDocs: 'total',
-        limit: 'pageSize',
-        page: 'current',
-        totalPages: 'size',
-        docs: 'data'
-    };
+    const { page, pageSize, firstName, lastName, current } = ctx.query;
 
     const pager = {
-        current,
-        pageSize: isNaN(pageSize) ? 10 : Number(pageSize),
-        myCustomLabels
+        page: page || current,
+        limit: isNaN(pageSize) ? 10 : Number(pageSize),
     };
 
     const filter = {};

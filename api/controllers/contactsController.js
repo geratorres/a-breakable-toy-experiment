@@ -2,13 +2,17 @@ const { contactModel: Contact } = require('../models');
 
 async function readAll(ctx, next) {
     const { pager, filter } = ctx;
+
     const result = await Contact.paginate(filter, pager);
 
     ctx.status = 200;
     ctx.body = {
         status: "success",
-        data: {
-            contacts: result.docs
+        contacts: result.docs,
+        pager: {
+            current: result.page,
+            total: result.totalDocs,
+            pageSize: result.limit
         }
     };
 
@@ -27,9 +31,7 @@ async function createOne(ctx, next) {
     ctx.status = 201;
     ctx.body = {
         status: "success",
-        data: {
-            svdContact: svdDoc
-        }
+        svdContact: svdDoc
     };
 
     await next();
@@ -45,9 +47,7 @@ async function readOne(ctx, next) {
     ctx.status = 200;
     ctx.body = {
         status: "success",
-        data: {
-            contact: doc
-        }
+        contact: doc
     };
 
     await next();
@@ -62,9 +62,7 @@ async function deleteOne(ctx, next) {
     ctx.status = 200;
     ctx.body = {
         status: "success",
-        data: {
-            deletedContact
-        }
+        deletedContact
     };
 
     await next();
@@ -82,9 +80,7 @@ async function updateOne(ctx, next) {
     ctx.status = 200;
     ctx.body = {
         status: "success",
-        data: {
-            updatedContact: updatedDoc,
-        }
+        updatedContact: updatedDoc,
     };
 
     await next();
