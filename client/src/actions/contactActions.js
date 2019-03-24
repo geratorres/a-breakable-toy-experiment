@@ -16,12 +16,12 @@ export const receiveContacts = data => {
     };
 };
 
-export const receiveError = () => {
+export const contactDeleted = data => {
     return {
-        type: "RECEIVE_ERROR"
+        type: "DELETED_CONTACT",
+        data
     };
 };
-
 
 
 const toQueryString = (obj = {}) => {
@@ -37,8 +37,8 @@ export const fetchContactsAction = ({ pager, filter }) => {
         return axios.get(`http://localhost:3005/api/contacts${toQueryString(pager)}`)
             .then(function (response) {
                 dispatch(receiveContacts(response.data));
-            }).catch(function (error) {
-                dispatch(receiveError());
+            }).catch(function (err) {
+                console.log(err)
             });
     };
 };
@@ -46,13 +46,16 @@ export const fetchContactsAction = ({ pager, filter }) => {
 export const deleteContactAction = (id) => {
     store.dispatch(fetchContacts());
 
+    if (!id) {
+        return Promise.reject();
+    }
+
     return function (dispatch, getState) {
         return axios.delete(`http://localhost:3005/api/contacts/${id}`)
             .then(function (response) {
-                const { pager } = getState();
-                dispatch(fetchContactsAction({ pager }));
-            }).catch(function (error) {
-                dispatch(receiveError());
+                dispatch(contactDeleted(response.data));
+            }).catch(function (err) {
+                console.log(err)
             });
     };
 };

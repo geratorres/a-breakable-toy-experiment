@@ -1,3 +1,5 @@
+import { CONTACT } from '../actions/actionTypes';
+
 const initialState = {
     contacts: [
         { firstName: "Gera" },
@@ -14,23 +16,17 @@ const initialState = {
 
 const contactReducer = (state = initialState, action) => {
     switch (action.type) {
-        case "FETCH_CONTACTS":
-            return Object.assign({}, state, {
-                isFetching: true,
-                contacts: [],
-                pager: state.pager,
-                isError: false
-            });
-        case "FETCHED_CONTACTS":
+        case CONTACT.FETCHED_CONTACTS:
             return Object.assign({}, state, {
                 ...action.data,
                 isFetching: false,
                 isError: false
             });
-        case "RECEIVE_ERROR":
+        case CONTACT.DELETED_CONTACT:
             return Object.assign({}, state, {
-                isError: true,
-                isFetching: false
+                contacts: state.contacts.filter(cnt => cnt._id !== action.data.deletedContact._id),
+                isFetching: false,
+                isError: false
             });
         default:
             return state;
