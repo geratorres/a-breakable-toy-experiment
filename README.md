@@ -1,5 +1,10 @@
 # a-breakable-toy-experiment
-Aplicacion en la que se pueden crear mostrar editar y borrar contactos
+Aplicacion en la que se pueden crear mostrar editar y borrar contactos.
+
+## Caracteristicas
+1. paginacion
+2. filtrado
+3. validacion en servidor
 
 ## Client
 ### Para ejecutar:
