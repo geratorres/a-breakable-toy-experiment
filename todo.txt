@@ -1,4 +1,6 @@
 API
+    Repair Joi Valiadtion, is admiting everything
+
     Nice to have:
         Validate params with joi Validation in middleware
 

@@ -31,7 +31,7 @@ async function createOne(ctx, next) {
     ctx.status = 201;
     ctx.body = {
         status: "success",
-        svdContact: svdDoc
+        contact: svdDoc
     };
 
     await next();
@@ -39,6 +39,8 @@ async function createOne(ctx, next) {
 
 async function readOne(ctx, next) {
     const { id } = ctx.params;
+
+    if (!id) ctx.throw('error', 400, new Error('Contact ID not received'));
 
     const doc = await Contact.findById(id);
 
@@ -56,13 +58,15 @@ async function readOne(ctx, next) {
 async function deleteOne(ctx, next) {
     const { id } = ctx.params;
 
+    if (!id) ctx.throw('error', 400, new Error('Contact ID not received'));
+
     const deletedContact = await Contact.findByIdAndDelete(id);
     deletedContact || ctx.throw('error', 400, new Error('Contact not Found'));
 
     ctx.status = 200;
     ctx.body = {
         status: "success",
-        deletedContact
+        contact: deletedContact
     };
 
     await next();
@@ -73,14 +77,15 @@ async function updateOne(ctx, next) {
     //maybe validate that id be a valid mongo id
     const { id } = ctx.params;
 
-    if (!contact) ctx.throw(400, 'Contact not received');
+    if (!contact) ctx.throw('error', 400, new Error('Contact not received'));
+    if (!id) ctx.throw('error', 400, new Error('Contact ID not received'));
 
     const updatedDoc = await Contact.findByIdAndUpdate(id, { $set: contact }, { new: true });
 
     ctx.status = 200;
     ctx.body = {
         status: "success",
-        updatedContact: updatedDoc,
+        contact: updatedDoc,
     };
 
     await next();

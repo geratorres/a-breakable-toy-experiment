@@ -1,6 +1,6 @@
 module.exports = function joiValidateContact(contact) {
     const Joi = require('joi');
-    
+
     const contactJoiSchema = Joi.object().keys({
         company: Joi.string().trim().regex(/^[a-z\d -_]+$/i, 'alphanumeric'),
         phoneNumber: Joi.string().trim().regex(/^[\d]+$/, 'numbers'),
