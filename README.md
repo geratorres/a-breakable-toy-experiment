@@ -13,30 +13,36 @@ API
     
 CLIENT
   Dependencias
-    "antd": "^3.15.2",
-    "axios": "^0.18.0",
-    "query-string-params": "^1.7.5",
-    "react": "^16.8.5",
-    "react-dom": "^16.8.5",
-    "react-highlight-words": "^0.16.0",
-    "react-redux": "^6.0.1",
-    "react-router-dom": "^5.0.0",
-    "react-scripts": "2.1.8",
-    "redux": "^4.0.1",
-    "redux-devtools-extension": "^2.13.8",
-    "redux-thunk": "^2.3.0"
+    antd
+    axios
+    query-string-params
+    reac
+    react-dom
+    react-highlight-words
+    react-redux
+    react-router-dom
+    react-scripts
+    redux
+    redux-devtools-extension
+    redux-thunk
 
-Para instalar las dependencias
+##Para instalar las dependencias
+
 cd api
+
 npm install
 
 cd ../client
+
 npm install
 
-Para correr
+##Para correr la aplicacion
   Tener las dependencias instaladas
+  
   cd api
+  
   npm start
 
   cd ../client
+  
   npm start
