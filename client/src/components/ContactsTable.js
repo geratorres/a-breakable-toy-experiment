@@ -55,10 +55,13 @@ class ContactsTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [], editingKey: ''
+      contacts: [],
+      editingKey: ''
     };
 
-    this.isEditing = record => record.key === this.state.editingKey;
+    this.isEditing = record => {
+      return record.key === this.state.editingKey
+    };
 
     this.columns = [
       { title: 'Name', dataIndex: 'firstName', key: 'firstName', editable: true, },
@@ -77,36 +80,48 @@ class ContactsTable extends Component {
                 <span>
                   <EditableContext.Consumer>
                     {form => (
-                      <a
-                        href="javascript:;"
-                        onClick={() => { this.save(form, record.key) }}
-                        style={{ marginRight: 8 }}
-                      >
+                      <a href="javascript:;" style={{ marginRight: 8 }} onClick={() => { this.save(form, record.key) }}>
                         Save
                       </a>
                     )}
                   </EditableContext.Consumer>
                   <Popconfirm
                     title="Sure to cancel?"
-                    onConfirm={() => this.cancel(record.key)}
+                    onConfirm={() => record.key > -1 ? this.cancel(record.key) : this.removeNewContactRow()}
                   >
                     <a href="javascript:;">Cancel</a>
                   </Popconfirm>
                 </span>
               ) : (
-                  <a href="javascript:;" disabled={editingKey !== ''} onClick={() => this.edit(record.key)}>Edit</a>
+                  <span>
+                    <a href="javascript:;" disabled={editingKey !== ''} onClick={() => this.edit(record.key)}>Edit</a>
+                    <Divider type="vertical" />
+                    <Popconfirm title="Sure to delete?" onConfirm={() => this.onContactDelete(record._id)}>
+                      <a disabled={editingKey !== ''} href="javascript:;">Delete</a>
+                    </Popconfirm>
+                  </span>
                 )}
-              <Divider type="vertical" />
-              <Popconfirm title="Sure to delete?" onConfirm={() => this.onContactDelete(record._id)}>
-                <a href="javascript:;">Delete</a>
-              </Popconfirm>
             </div>
           )
         }
-
-
       }
     ];
+  }
+
+  componentWillMount() {
+    const { dispatch, contactsPager } = this.props;
+
+    dispatch(fetchContacts({ pager: contactsPager }));
+  }
+
+  componentDidUpdate(prevProps) {
+    const { contacts } = this.props;
+    if (prevProps.contacts != contacts) {
+      const contactsWhitKeys = contacts.map((contact, index) => {
+        return Object.assign({}, contact, { key: index.toString() });
+      });
+      this.setState({ contacts: contactsWhitKeys, editingKey: '' });
+    }
   }
 
   edit(key) {
@@ -116,12 +131,6 @@ class ContactsTable extends Component {
   cancel = () => {
     this.setState({ editingKey: '' });
   };
-
-  componentWillMount() {
-    const { dispatch, contactsPager } = this.props;
-
-    dispatch(fetchContacts({ pager: contactsPager }));
-  }
 
   onPagerChange = (page, pageSize) => {
     const { dispatch } = this.props;
@@ -137,47 +146,46 @@ class ContactsTable extends Component {
   }
 
   save(form, key) {
-    form.validateFields((error, row) => {
+    form.validateFields((error, contact) => {
       if (error) return;
 
-      const newData = [...this.state.data];
-      const index = newData.findIndex(item => key === item.key);
+      const { contacts: data } = this.state;
 
-      if (index > -1) {
-        const id = newData[index]._id;
-
-        this.props.dispatch(updateContact({ id, contact: row })).then(() => {
-          this.setState({ editingKey: '' });
-        });
+      if (key > -1) {
+        this.props.dispatch(updateContact({ contact, id: data.find(ds => ds.key === key)._id }));
       } else {
-        this.props.dispatch(createContact(row)).then(() => {
-          this.setState({ editingKey: '' });
-        });
+        this.props.dispatch(createContact(contact));
       }
     });
   }
 
-  componentDidUpdate(prevProps) {
-    const { contacts } = this.props;
-    if (prevProps.contacts != contacts) {
-      this.setState({
-        data: contacts.map((contact, index) => {
-          return Object.assign({}, contact, { key: index.toString() });
-        })
-      });
-    }
+  addNewContactRow = () => {
+    const { contacts } = this.state;
+    const newData = {
+      key: -1,
+      firstName: '',
+      lastName: '',
+      company: '',
+      phoneNumber: '',
+      email: ''
+    };
+    this.setState({
+      contacts: [newData, ...contacts],
+      editingKey: -1
+    });
+  }
+
+  removeNewContactRow = () => {
+    const { contacts } = this.state;
+    this.setState({
+      contacts: contacts.filter(ds => ds.key !== - 1),
+      editingKey: ''
+    });
   }
 
   render() {
-    const { contactsPager, isFetching, contacts } = this.props;
-    const { data } = this.state;
-
-
-    const components = {
-      body: {
-        cell: EditableCell,
-      },
-    };
+    const { contactsPager, isFetching } = this.props;
+    const { contacts, editingKey } = this.state;
 
     const columns = this.columns.map((col) => {
       if (!col.editable) {
@@ -195,17 +203,28 @@ class ContactsTable extends Component {
       };
     });
 
+    const components = {
+      body: {
+        cell: EditableCell,
+      },
+    };
+
     return (
-      <EditableContext.Provider value={this.props.form}>
-        <Table
-          columns={columns}
-          dataSource={data}
-          pagination={{ ...contactsPager, onChange: this.onPagerChange }}
-          loading={isFetching}
-          components={components}
-          rowClassName="editable-row"
-        />
-      </EditableContext.Provider>
+      <div>
+        <Button disabled={editingKey !== ''} onClick={this.addNewContactRow} type="primary" style={{ marginBottom: 16 }}>
+          Add Contact
+        </Button>
+        <EditableContext.Provider value={this.props.form}>
+          <Table
+            columns={columns}
+            dataSource={contacts}
+            pagination={{ ...contactsPager, onChange: this.onPagerChange }}
+            loading={isFetching}
+            components={components}
+            rowClassName="editable-row"
+          />
+        </EditableContext.Provider>
+      </div>
     );
   }
 }
@@ -218,6 +237,5 @@ const mapStateToProps = state => {
 };
 
 const WrapedContactsTable = Form.create()(ContactsTable);
-
 
 export default connect(mapStateToProps)(WrapedContactsTable);

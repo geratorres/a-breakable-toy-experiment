@@ -26,12 +26,14 @@ const contactReducer = (state = initialState, action) => {
             });
         case CONTACTS.DELETED_CONTACT:
             return Object.assign({}, state, {
-                contacts: state.contacts.filter(cnt => cnt._id !== action.data.deletedContact._id),
+                contacts: state.contacts.filter(cnt => cnt._id !== action.data.contact._id),
                 isFetching: false,
                 isError: false
             });
         case CONTACTS.CREATED_CONTACT:
             return Object.assign({}, state, {
+                //TODO: Handle pagination to avoid posible 11 contacts in onepage, maybe not, Paginations from antd could handle that
+                //But Redux store cloud have 11 contacts when should there are 10
                 contacts: [...state.contacts, action.data.contact],
                 isFetching: false,
                 isError: false
