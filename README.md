@@ -1,48 +1,36 @@
 # a-breakable-toy-experiment
-Aplicacion en la que se pueden crear mostrar editar y borrar contactos,
+Aplicacion en la que se pueden crear mostrar editar y borrar contactos
 
-API
-  Dependencias
-    "joi": "^14.3.1",
-    "koa": "^2.7.0",
-    "koa-bodyparser": "^4.2.1",
-    "koa-router": "^7.4.0",
-    "koa2-cors": "^2.0.6",
-    "mongoose": "^5.4.19",
-    "mongoose-paginate-v2": "^1.0.24"
-    
-CLIENT
-  Dependencias
-    antd
-    axios
-    query-string-params
-    reac
-    react-dom
-    react-highlight-words
-    react-redux
-    react-router-dom
-    react-scripts
-    redux
-    redux-devtools-extension
-    redux-thunk
+## Client
+### Para ejecutar:
+1. cd client
+2. npm install
+3. npm start
+### Dependencias
+1. antd
+2. axios
+3. query-string-params
+4. reac
+5. react-dom
+6. react-highlight-words
+7. react-redux
+8. react-router-dom
+9. react-scripts
+10. redux
+11. redux-devtools-extension
+12. redux-thunk
 
-##Para instalar las dependencias
+### API
 
-cd api
-
-npm install
-
-cd ../client
-
-npm install
-
-##Para correr la aplicacion
-  Tener las dependencias instaladas
-  
-  cd api
-  
-  npm start
-
-  cd ../client
-  
-  npm start
+### Para ejecutar:
+1. cd api
+2. npm install
+3. npm start
+### Dependencias
+1. joi
+2. koa
+3. koa-bodyparser
+4. koa-router
+5. koa2-cors
+6. mongoose
+7. mongoose-paginate-v2
