@@ -5,9 +5,9 @@ module.exports = async (ctx, next) => {
     const { contact } = ctx.request.body;
 
     if (contact) {
-        const { err, value } = contactValidation(contact);
+        const { error, value } = contactValidation(contact);
 
-        err && ctx.throw('error', 400, err);
+        error && ctx.throw('error', 400, error);
 
         ctx.request.body.contact = value;
     }
