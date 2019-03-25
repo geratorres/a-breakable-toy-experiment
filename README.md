@@ -20,7 +20,7 @@ Aplicacion en la que se pueden crear mostrar editar y borrar contactos
 11. redux-devtools-extension
 12. redux-thunk
 
-### API
+## API
 
 ### Para ejecutar:
 1. cd api
